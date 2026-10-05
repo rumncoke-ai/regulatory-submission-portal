@@ -54,7 +54,22 @@ describe("Regulatory Submission Portal", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Under Review")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Supporting documents" }),
+      screen.getByRole("heading", {
+        name: /Supporting documents.*Documents justificatifs/,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Submission details/)).toBeInTheDocument();
+    expect(screen.getByText(/Détails de la soumission/)).toHaveAttribute(
+      "lang",
+      "fr",
+    );
+    expect(screen.getByText(/Statut/)).toBeInTheDocument();
+    expect(screen.getByText(/Type de soumission/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Organisation/)).toHaveLength(2);
+    expect(screen.getByText(/Personne-ressource/)).toBeInTheDocument();
+    expect(screen.getByText(/Dernière mise à jour/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Description.*Description/ }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/product-summary\.pdf/),
