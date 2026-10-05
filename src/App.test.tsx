@@ -55,25 +55,67 @@ describe("Regulatory Submission Portal", () => {
     expect(screen.getByText("Under Review")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: /Supporting documents.*Documents justificatifs/,
+        name: "Supporting documents",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Submission details/)).toBeInTheDocument();
-    expect(screen.getByText(/Détails de la soumission/)).toHaveAttribute(
-      "lang",
-      "fr",
-    );
-    expect(screen.getByText(/Statut/)).toBeInTheDocument();
-    expect(screen.getByText(/Type de soumission/)).toBeInTheDocument();
-    expect(screen.getAllByText(/Organisation/)).toHaveLength(2);
-    expect(screen.getByText(/Personne-ressource/)).toBeInTheDocument();
-    expect(screen.getByText(/Dernière mise à jour/)).toBeInTheDocument();
+    expect(screen.getByText("Submission details")).toBeInTheDocument();
+    expect(screen.getByText("Status")).toBeInTheDocument();
+    expect(screen.getByText("Submission type")).toBeInTheDocument();
+    expect(screen.getByText("Organization and contact")).toBeInTheDocument();
+    expect(screen.queryByText("Détails de la soumission")).not.toBeInTheDocument();
+    expect(screen.getByText("Last updated")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /Description.*Description/ }),
+      screen.getByRole("heading", { name: "Description" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/product-summary\.pdf/),
     ).toBeInTheDocument();
+  });
+
+  it("switches submission details and navigation between English and French", async () => {
+    const user = userEvent.setup();
+    renderApp("/submissions/sample-1");
+
+    expect(
+      screen.getByRole("group", { name: "Language / Langue" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "English" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(document.documentElement).toHaveAttribute("lang", "en");
+
+    await user.click(screen.getByRole("button", { name: "Français" }));
+
+    expect(document.documentElement).toHaveAttribute("lang", "fr");
+    expect(screen.getByRole("heading", { name: "Aperçu" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: "Organisation et personne-ressource",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Documents justificatifs" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Dernière mise à jour")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /Retour à toutes les soumissions/ }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Overview")).not.toBeInTheDocument();
+    expect(screen.queryByText("Supporting documents")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Aurora Lantern Foods Inc.")).toHaveLength(2);
+    expect(
+      screen.getByRole("navigation", { name: "Navigation principale" }),
+    ).toHaveTextContent("Soumissions");
+
+    await user.click(screen.getByRole("button", { name: "English" }));
+
+    expect(document.documentElement).toHaveAttribute("lang", "en");
+    expect(screen.getByRole("heading", { name: "Overview" })).toBeInTheDocument();
+    expect(screen.getAllByText("Aurora Lantern Foods Inc.")).toHaveLength(2);
+    expect(
+      screen.getByRole("navigation", { name: "Primary navigation" }),
+    ).toHaveTextContent("Submissions");
   });
 
   it("shows a not-found view for an unknown submission", async () => {

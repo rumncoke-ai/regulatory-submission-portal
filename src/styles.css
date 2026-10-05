@@ -120,6 +120,37 @@ nav a.active {
   background: rgba(255, 255, 255, 0.14);
 }
 
+.header-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.language-switch button {
+  padding: 0.45rem 0.6rem;
+  color: white;
+  font: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.language-switch button[aria-pressed="true"] {
+  border-color: white;
+  font-weight: 700;
+}
+
+.language-switch button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .main-content {
   min-height: calc(100vh - 15rem);
   padding-block: 2.5rem 4rem;
@@ -505,6 +536,16 @@ address {
   nav a {
     padding-inline: 0;
     margin-right: 1.5rem;
+  }
+
+  .header-controls {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .language-switch {
+    padding-bottom: 0.5rem;
   }
 
   .summary-grid,

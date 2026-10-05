@@ -1,29 +1,47 @@
 import { useEffect, useMemo } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { useLanguage } from "../LanguageContext";
 import StatusBadge from "../components/StatusBadge";
 import { statusDescriptions, type Submission } from "../domain";
 import { submissionRepository } from "../repository";
 
-const dateFormatter = new Intl.DateTimeFormat("en-CA", {
+const dateFormatOptions: Intl.DateTimeFormatOptions = {
   dateStyle: "long",
   timeStyle: "short",
-});
+};
 
 export default function SubmissionDetailPage() {
+  const { language } = useLanguage();
   const { id = "" } = useParams();
   const location = useLocation();
   const { submission, loadError } = useMemo(() => loadSubmission(id), [id]);
+  const dateFormatter = new Intl.DateTimeFormat(
+    language === "fr" ? "fr-CA" : "en-CA",
+    dateFormatOptions,
+  );
 
   useEffect(() => {
     document.title = submission
-      ? `${submission.referenceNumber} | Regulatory Submission Portal`
-      : "Submission not found | Regulatory Submission Portal";
-  }, [submission]);
+      ? `${submission.referenceNumber} | ${
+          language === "fr"
+            ? "Portail des soumissions réglementaires"
+            : "Regulatory Submission Portal"
+        }`
+      : `${
+          language === "fr" ? "Soumission introuvable" : "Submission not found"
+        } | ${
+          language === "fr"
+            ? "Portail des soumissions réglementaires"
+            : "Regulatory Submission Portal"
+        }`;
+  }, [language, submission]);
 
   if (loadError) {
     return (
       <div className="alert alert-error" role="alert">
-        The saved submission could not be loaded.
+        {language === "fr"
+          ? "La soumission enregistrée n’a pas pu être chargée."
+          : "The saved submission could not be loaded."}
       </div>
     );
   }
@@ -42,10 +60,18 @@ export default function SubmissionDetailPage() {
   if (!submission) {
     return (
       <div className="empty-state">
-        <h1>Submission not found</h1>
-        <p>The requested submission does not exist.</p>
+        <h1>
+          {language === "fr" ? "Soumission introuvable" : "Submission not found"}
+        </h1>
+        <p>
+          {language === "fr"
+            ? "La soumission demandée n’existe pas."
+            : "The requested submission does not exist."}
+        </p>
         <Link className="button" to="/">
-          Return to submissions
+          {language === "fr"
+            ? "Retour aux soumissions"
+            : "Return to submissions"}
         </Link>
       </div>
     );
@@ -60,55 +86,58 @@ export default function SubmissionDetailPage() {
       {createdState?.created && (
         <div className="alert alert-success" role="status">
           <strong>
-            {createdState.asDraft ? "Draft saved." : "Submission received."}
+            {language === "fr"
+              ? createdState.asDraft
+                ? "Brouillon enregistré."
+                : "Soumission reçue."
+              : createdState.asDraft
+                ? "Draft saved."
+                : "Submission received."}
           </strong>
           <span>
-            Your reference number is {submission.referenceNumber}.
+            {language === "fr"
+              ? "Votre numéro de référence est"
+              : "Your reference number is"}{" "}
+            {submission.referenceNumber}.
           </span>
         </div>
       )}
       <div className="page-heading">
         <p className="eyebrow">
-          Submission details <span lang="fr">/ Détails de la soumission</span>
+          {language === "fr" ? "Détails de la soumission" : "Submission details"}
         </p>
         <h1>{submission.referenceNumber}</h1>
         <div className="status-heading">
-          <span>
-            Status <span lang="fr">/ Statut</span>
-          </span>
+          <span>{language === "fr" ? "Statut" : "Status"}</span>
           <StatusBadge status={submission.status} />
-          <span>{statusDescriptions[submission.status]}</span>
+          <span>
+            {language === "fr"
+              ? frenchStatusDescriptions[submission.status]
+              : statusDescriptions[submission.status]}
+          </span>
         </div>
       </div>
 
       <div className="detail-grid">
         <section className="detail-card" aria-labelledby="overview-heading">
-          <h2 id="overview-heading">
-            Overview <span lang="fr">/ Aperçu</span>
-          </h2>
+          <h2 id="overview-heading">{language === "fr" ? "Aperçu" : "Overview"}</h2>
           <dl>
             <div>
-              <dt>
-                Organization <span lang="fr">/ Organisation</span>
-              </dt>
+              <dt>{language === "fr" ? "Organisation" : "Organization"}</dt>
               <dd>{submission.organizationName}</dd>
             </div>
             <div>
               <dt>
-                Submission type <span lang="fr">/ Type de soumission</span>
+                {language === "fr" ? "Type de soumission" : "Submission type"}
               </dt>
               <dd>{submission.submissionType}</dd>
             </div>
             <div>
-              <dt>
-                Created <span lang="fr">/ Créée le</span>
-              </dt>
+              <dt>{language === "fr" ? "Créée le" : "Created"}</dt>
               <dd>{dateFormatter.format(new Date(submission.createdAt))}</dd>
             </div>
             <div>
-              <dt>
-                Last updated <span lang="fr">/ Dernière mise à jour</span>
-              </dt>
+              <dt>{language === "fr" ? "Dernière mise à jour" : "Last updated"}</dt>
               <dd>{dateFormatter.format(new Date(submission.updatedAt))}</dd>
             </div>
           </dl>
@@ -116,8 +145,9 @@ export default function SubmissionDetailPage() {
 
         <section className="detail-card" aria-labelledby="contact-heading">
           <h2 id="contact-heading">
-            Organization and contact{" "}
-            <span lang="fr">/ Organisation et personne-ressource</span>
+            {language === "fr"
+              ? "Organisation et personne-ressource"
+              : "Organization and contact"}
           </h2>
           <address>
             <strong>{submission.organizationName}</strong>
@@ -133,7 +163,7 @@ export default function SubmissionDetailPage() {
           </address>
           <p>
             <strong>
-              Contact <span lang="fr">/ Personne-ressource</span>
+              {language === "fr" ? "Personne-ressource" : "Contact"}
             </strong>
             <br />
             {submission.contactFirstName} {submission.contactLastName}
@@ -155,9 +185,14 @@ export default function SubmissionDetailPage() {
           aria-labelledby="description-heading"
         >
           <h2 id="description-heading">
-            Description <span lang="fr">/ Description</span>
+            Description
           </h2>
-          <p>{submission.description || "No description has been provided."}</p>
+          <p>
+            {submission.description ||
+              (language === "fr"
+                ? "Aucune description n’a été fournie."
+                : "No description has been provided.")}
+          </p>
         </section>
 
         <section
@@ -165,8 +200,9 @@ export default function SubmissionDetailPage() {
           aria-labelledby="documents-heading"
         >
           <h2 id="documents-heading">
-            Supporting documents{" "}
-            <span lang="fr">/ Documents justificatifs</span>
+            {language === "fr"
+              ? "Documents justificatifs"
+              : "Supporting documents"}
           </h2>
           {submission.attachments.length > 0 ? (
             <ul>
@@ -178,17 +214,37 @@ export default function SubmissionDetailPage() {
               ))}
             </ul>
           ) : (
-            <p>No supporting documents were added.</p>
+            <p>
+              {language === "fr"
+                ? "Aucun document justificatif n’a été ajouté."
+                : "No supporting documents were added."}
+            </p>
           )}
           <p className="hint">
-            File contents are not retained by this portal.
+            {language === "fr"
+              ? "Le contenu des fichiers n’est pas conservé par ce portail."
+              : "File contents are not retained by this portal."}
           </p>
         </section>
       </div>
 
       <p>
-        <Link to="/">&larr; Back to all submissions</Link>
+        <Link to="/">
+          {language === "fr"
+            ? "← Retour à toutes les soumissions"
+            : "← Back to all submissions"}
+        </Link>
       </p>
     </>
   );
 }
+
+const frenchStatusDescriptions: Record<Submission["status"], string> = {
+  Draft: "Cette soumission a été enregistrée, mais pas envoyée.",
+  Submitted: "La soumission a été reçue pour traitement.",
+  "Under Review": "L’équipe d’examen évalue la soumission.",
+  "Additional Information Required":
+    "Des renseignements supplémentaires sont nécessaires pour poursuivre l’examen.",
+  Approved: "L’examen a été effectué avec succès.",
+  Closed: "Le traitement de cette soumission est terminé.",
+};
