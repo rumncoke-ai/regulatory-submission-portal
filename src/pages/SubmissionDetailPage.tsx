@@ -68,9 +68,14 @@ export default function SubmissionDetailPage() {
         </div>
       )}
       <div className="page-heading">
-        <p className="eyebrow">Submission details</p>
+        <p className="eyebrow">
+          Submission details <span lang="fr">/ Détails de la soumission</span>
+        </p>
         <h1>{submission.referenceNumber}</h1>
         <div className="status-heading">
+          <span>
+            Status <span lang="fr">/ Statut</span>
+          </span>
           <StatusBadge status={submission.status} />
           <span>{statusDescriptions[submission.status]}</span>
         </div>
@@ -78,29 +83,42 @@ export default function SubmissionDetailPage() {
 
       <div className="detail-grid">
         <section className="detail-card" aria-labelledby="overview-heading">
-          <h2 id="overview-heading">Overview</h2>
+          <h2 id="overview-heading">
+            Overview <span lang="fr">/ Aperçu</span>
+          </h2>
           <dl>
             <div>
-              <dt>Organization</dt>
+              <dt>
+                Organization <span lang="fr">/ Organisation</span>
+              </dt>
               <dd>{submission.organizationName}</dd>
             </div>
             <div>
-              <dt>Submission type</dt>
+              <dt>
+                Submission type <span lang="fr">/ Type de soumission</span>
+              </dt>
               <dd>{submission.submissionType}</dd>
             </div>
             <div>
-              <dt>Created</dt>
+              <dt>
+                Created <span lang="fr">/ Créée le</span>
+              </dt>
               <dd>{dateFormatter.format(new Date(submission.createdAt))}</dd>
             </div>
             <div>
-              <dt>Last updated</dt>
+              <dt>
+                Last updated <span lang="fr">/ Dernière mise à jour</span>
+              </dt>
               <dd>{dateFormatter.format(new Date(submission.updatedAt))}</dd>
             </div>
           </dl>
         </section>
 
         <section className="detail-card" aria-labelledby="contact-heading">
-          <h2 id="contact-heading">Organization and contact</h2>
+          <h2 id="contact-heading">
+            Organization and contact{" "}
+            <span lang="fr">/ Organisation et personne-ressource</span>
+          </h2>
           <address>
             <strong>{submission.organizationName}</strong>
             <br />
@@ -114,6 +132,10 @@ export default function SubmissionDetailPage() {
             )}
           </address>
           <p>
+            <strong>
+              Contact <span lang="fr">/ Personne-ressource</span>
+            </strong>
+            <br />
             {submission.contactFirstName} {submission.contactLastName}
             <br />
             <a href={`mailto:${submission.contactEmail}`}>
@@ -132,7 +154,9 @@ export default function SubmissionDetailPage() {
           className="detail-card detail-card-wide"
           aria-labelledby="description-heading"
         >
-          <h2 id="description-heading">Description</h2>
+          <h2 id="description-heading">
+            Description <span lang="fr">/ Description</span>
+          </h2>
           <p>{submission.description || "No description has been provided."}</p>
         </section>
 
@@ -140,7 +164,10 @@ export default function SubmissionDetailPage() {
           className="detail-card detail-card-wide"
           aria-labelledby="documents-heading"
         >
-          <h2 id="documents-heading">Supporting documents</h2>
+          <h2 id="documents-heading">
+            Supporting documents{" "}
+            <span lang="fr">/ Documents justificatifs</span>
+          </h2>
           {submission.attachments.length > 0 ? (
             <ul>
               {submission.attachments.map((attachment) => (
