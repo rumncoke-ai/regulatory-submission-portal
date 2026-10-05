@@ -65,7 +65,7 @@ describe("Regulatory Submission Portal", () => {
     );
     expect(screen.getByText(/Statut/)).toBeInTheDocument();
     expect(screen.getByText(/Type de soumission/)).toBeInTheDocument();
-    expect(screen.getByText(/Organisation/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Organisation/)).toHaveLength(2);
     expect(screen.getByText(/Personne-ressource/)).toBeInTheDocument();
     expect(screen.getByText(/Dernière mise à jour/)).toBeInTheDocument();
     expect(
