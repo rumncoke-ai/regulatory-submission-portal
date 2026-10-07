@@ -1,275 +1,107 @@
-# GitHub Copilot Cloud Agent Demo
+# Use GitHub Copilot Cloud Agent for a Development Issue
 
-Welcome to the GitHub Copilot Cloud Agent demo!
+Use this guide to delegate a focused GitHub issue to GitHub Copilot, review its work, and iterate through a pull request.
 
-In this exercise, you will use GitHub Copilot to implement a small enhancement to the fictional **Regulatory Submission Portal**. The goal is to experience how a well-defined GitHub issue can be delegated to Copilot and then reviewed through the normal pull request workflow.
+## Prerequisites
 
----
+- Access to GitHub Copilot coding agent for the repository
+- Permission to create issues and review pull requests
+- A repository with its development environment and tests documented
 
-## What You'll Learn
+## 1. Create a Focused Issue
 
-By the end of this demo, you will:
+In the repository, open **Issues**, select **New issue**, and use:
 
-- [ ] Create a well-defined GitHub issue
-- [ ] Ask GitHub Copilot to implement an issue
-- [ ] Observe Copilot working on the task
-- [ ] Review Copilot's agent session
-- [ ] Review the resulting pull request and code changes
-- [ ] Understand where human review fits into an agentic development workflow
-
-**Estimated Time:** 10 minutes
-
----
-
-# 🎯 Step 1: Create the Development Issue
-
-**Goal:** Define a small development task for the Regulatory Submission Portal.
-
-1. Go to the **Issues** tab of the Regulatory Submission Portal repository.
-2. Select **New issue**.
-3. Use the following title:
-
-**Display last updated date on regulatory submissions**
-
-4. Add the following issue description:
+**Title:** `Add dark mode to the UI`
 
 ```markdown
 ## Description
 
-Users should be able to see when a regulatory submission was last updated.
+Users should be able to switch the Regulatory Submission Portal between its existing light appearance and a dark appearance.
 
-Add a **Last Updated** field to the submission details page so users can quickly understand how recently the submission information changed.
+Add an accessible theme control to the application shell. Keep the existing light theme as the default and remember the user's selection across page reloads.
 
-## Acceptance Criteria
+## Acceptance criteria
 
-- Display a **Last Updated** field on the submission details page.
-- Position it near the existing submission status information.
-- Use the application's existing date formatting conventions.
-- Ensure the field is presented accessibly.
+- Add a theme control in the application header that switches between light and dark modes.
+- Keep the existing light theme as the default when no preference has been saved.
+- Apply the selected theme across every page without changing existing content or workflows.
+- Persist the selected theme in browser storage and restore it after a page reload.
+- Give the control an accessible name and programmatically determinable state.
+- Ensure the control is keyboard operable and has a clearly visible focus indicator in both themes.
+- Ensure text, controls, status badges, links, borders, alerts, and focus indicators meet the documented WCAG 2.1 AA contrast requirements in both themes.
+- Preserve the existing responsive behavior.
 - Add or update relevant automated tests.
+- Update relevant user documentation.
 - Do not make unrelated changes.
 
-## Expected Result
+## Expected result
 
-When viewing a regulatory submission, the user can clearly see when the submission was last updated.
+Users can switch the entire application between accessible light and dark themes, and their choice remains in effect after reloading the page.
 ```
 
-5. Create the issue.
+Create the issue and note its number.
 
-### Why this issue works well for the demo
+## 2. Delegate the Issue
 
-The issue describes the desired **outcome and acceptance criteria** without telling Copilot exactly which files to change or how to implement the solution.
-
-This gives Copilot an opportunity to investigate the repository and determine how the enhancement should be implemented.
-
-**Expected Result:** A new GitHub issue is created describing the Last Updated enhancement.
-
----
-
-# 🤖 Step 2: Ask GitHub Copilot to Implement the Issue
-
-**Goal:** Delegate the development task to GitHub Copilot.
-
-1. From GitHub.com, open **Copilot Chat**.
-2. Reference the issue you just created.
-3. Ask Copilot:
-
-```text
-Implement this issue.
-```
-
-Alternatively, use a slightly more explicit prompt:
+Open GitHub Copilot on GitHub.com, reference the issue, and enter:
 
 ```text
 Implement this issue according to its acceptance criteria.
 
-Inspect the existing repository before making changes and follow the application's existing patterns.
-
-Keep the implementation focused on the requested change and do not make unrelated changes.
+Inspect the repository before making changes, follow its existing patterns, run the relevant tests, and avoid unrelated changes.
 ```
 
-4. Review the task Copilot has been given.
-5. Start the coding task using the available Copilot coding agent workflow.
-6. Observe the initial agent activity.
+Review the task details, then start the coding task.
 
-### What to look for
+## 3. Review the Agent Session
 
-As Copilot works, pay attention to how the agent:
+When Copilot opens a pull request, select **View session** and confirm that it:
 
-- Investigates the existing repository
-- Identifies relevant files
-- Determines how the existing submission data is structured
-- Implements the requested change
-- Updates or adds relevant tests
-- Prepares its changes for review
+- Inspected the relevant code and tests
+- Followed the issue's acceptance criteria
+- Kept the change within scope
+- Ran or updated relevant tests
+- Reported any problems or limitations
 
-### Discussion
+## 4. Review the Pull Request
 
-Notice that the issue did not specify exactly which component or file Copilot needed to modify.
+Review the changed files and verify:
 
-The developer provided the **desired outcome and constraints**, while Copilot investigates the repository to determine how to implement the change.
+- [ ] A theme control appears in the application header.
+- [ ] The control switches every page between light and dark modes.
+- [ ] Light mode remains the default when no preference has been saved.
+- [ ] The selected theme is restored after a page reload.
+- [ ] The control has an accessible name and exposes its current state.
+- [ ] The control works with a keyboard and has a visible focus indicator in both themes.
+- [ ] Both themes meet the documented WCAG 2.1 AA contrast requirements.
+- [ ] Existing content, workflows, and responsive behavior are preserved.
+- [ ] Relevant tests were added or updated and pass.
+- [ ] Relevant user documentation was updated.
+- [ ] No unrelated changes were included.
 
----
+Do not merge solely because Copilot created the pull request. Apply the same review and approval standards used for any contribution.
 
-# 📚 Step 3: Review Copilot's Session
+## 5. Request Changes if Needed
 
-**Goal:** Understand how Copilot approached the development task.
-
-1. Open the pull request created for the task.
-2. Select **View Session** to inspect the agent's work.
-3. Review how Copilot approached the issue.
-
-Look for:
-
-- What repository context Copilot inspected
-- Which files Copilot determined were relevant
-- How Copilot interpreted the acceptance criteria
-- What implementation approach Copilot selected
-- Whether Copilot ran or updated tests
-- Any problems or limitations Copilot encountered
-
-### Discussion
-
-Consider:
-
-- Did Copilot correctly understand the issue?
-- Did Copilot inspect the appropriate parts of the repository?
-- Did the implementation remain within the scope of the issue?
-- Are there decisions you would have made differently as the developer?
-
-**Key takeaway:** The agent's work is still reviewable. Developers can inspect how the task was approached rather than treating the generated result as an automatic final answer.
-
----
-
-# 🔍 Step 4: Review the Pull Request
-
-**Goal:** Review Copilot's implementation just as you would review another developer's contribution.
-
-1. Return to the pull request.
-2. Open the changed-files view.
-3. Inspect the code modifications.
-4. Compare the implementation against the original issue.
-
-Use the acceptance criteria as your review checklist:
-
-- [ ] Is **Last Updated** displayed on the submission details page?
-- [ ] Is the field positioned near the existing status information?
-- [ ] Does it follow the application's existing date formatting?
-- [ ] Is the new information presented accessibly?
-- [ ] Were relevant tests added or updated?
-- [ ] Did Copilot avoid unrelated changes?
-
-### Important
-
-Do not merge the pull request simply because Copilot created it.
-
-Treat Copilot's changes like any other code contribution:
-
-**Issue → Implementation → Tests → Review → Approval**
-
-The developer remains responsible for deciding whether the changes meet the project's requirements.
-
----
-
-# 💬 Step 5: Iterate on Copilot's Work
-
-**Goal:** Demonstrate that the workflow does not end after Copilot produces the first implementation.
-
-If you identify something that could be improved, provide additional feedback.
-
-For example:
+Leave focused feedback on the pull request or agent session. For example:
 
 ```text
-Please verify that the Last Updated field is covered by the appropriate automated tests.
-
-If coverage is missing, add the necessary test without making unrelated changes.
+Verify that automated tests cover switching themes, the default light theme, and restoring the saved preference after a reload. If coverage is missing, add the necessary tests without making unrelated changes.
 ```
 
 Or:
 
 ```text
-Please ensure the Last Updated field follows the same date formatting pattern used elsewhere in the application.
-
-Only make changes if necessary.
+Check the dark theme against the documented contrast requirements, including status badges, links, controls, alerts, borders, and focus indicators. Fix any failures without changing unrelated styles.
 ```
 
-Review the resulting changes again before approving the pull request.
+Review the updated code and test results before approving or merging.
 
-### Discussion
+## Completion Check
 
-This demonstrates an important part of agentic development:
-
-The developer does not need to accept the first implementation unchanged.
-
-The workflow can remain iterative:
-
-**Assign → Review → Provide feedback → Agent updates → Review again**
-
----
-
-# ✅ Completion Checklist
-
-Mark each item as you complete it:
-
-## Issue
-
-- [ ] Created the **Display last updated date on regulatory submissions** issue
-- [ ] Added clear acceptance criteria
-- [ ] Avoided prescribing unnecessary implementation details
-
-## Copilot
-
-- [ ] Opened Copilot Chat on GitHub.com
-- [ ] Referenced the GitHub issue
-- [ ] Asked Copilot to implement the issue
-- [ ] Started the coding task
-
-## Review
-
-- [ ] Viewed Copilot's agent session
-- [ ] Reviewed the files Copilot changed
-- [ ] Compared the changes against the acceptance criteria
-- [ ] Reviewed relevant tests
-- [ ] Provided additional feedback if necessary
-- [ ] Reviewed the final pull request
-
----
-
-# 🎤 Final Discussion
-
-Consider the following questions:
-
-- What information did Copilot need from the issue to successfully begin the task?
-- What did Copilot figure out by investigating the repository?
-- Was the issue specific enough without prescribing the implementation?
-- What parts of Copilot's work still required developer judgment?
-- How could your team determine which development tasks are appropriate to delegate to an agent?
-- How does code review change when the contributor is a coding agent?
-
----
-
-# 🚀 What's Next?
-
-Congratulations! You've used GitHub Copilot to take a development task from a GitHub issue through implementation and human review.
-
-In this demo, the workflow was:
-
-**GitHub Issue**
-↓  
-**Copilot receives the task**
-↓  
-**Agent investigates the repository**
-↓  
-**Agent implements the enhancement**
-↓  
-**Tests and changes are prepared**
-↓  
-**Pull request is created**
-↓  
-**Developer reviews the work**
-↓  
-**Developer provides feedback or approves the change**
-
-The key takeaway is that GitHub Copilot can take on more of the implementation work while the developer remains responsible for defining the desired outcome, reviewing the resulting changes, and deciding whether the implementation should be accepted.
-
-This completes the Regulatory Submission Portal Cloud Agent demo.
+- [ ] The issue defines a clear outcome and testable acceptance criteria.
+- [ ] Copilot investigated the repository and implemented only the requested change.
+- [ ] A person reviewed the session, code, and tests.
+- [ ] Requested revisions were completed and reviewed.
+- [ ] The pull request meets the repository's merge requirements.
